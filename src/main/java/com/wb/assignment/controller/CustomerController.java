@@ -1,8 +1,6 @@
 package com.wb.assignment.controller;
 
 import com.wb.assignment.model.entity.Customer;
-import com.wb.assignment.model.enums.CustomerStatus;
-import com.wb.assignment.model.enums.CustomerType;
 import com.wb.assignment.response.UnifiedResponse;
 import com.wb.assignment.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,41 +54,6 @@ public class CustomerController {
         var customers = customerService.getAllCustomers();
 
         return ResponseEntity.ok(UnifiedResponse.success(customers, HttpStatus.OK));
-    }
-
-    /* ================= FILTER BY TYPE ================= */
-
-    @Operation(summary = "Get Customer By Type")
-    @GetMapping("/type/{type}")
-    public ResponseEntity<UnifiedResponse<List<Customer>>> getCustomersByType(
-            @PathVariable CustomerType type) {
-
-        var customers = customerService.getCustomersByType(type);
-        return ResponseEntity.ok(UnifiedResponse.success(customers, HttpStatus.OK));
-    }
-
-    /* ================= FILTER BY STATUS ================= */
-
-    @Operation(summary = "Get Customer by status")
-    @GetMapping("/status/{status}")
-    public ResponseEntity<UnifiedResponse<List<Customer>>> getCustomersByStatus(
-            @PathVariable CustomerStatus status) {
-
-        var customers = customerService.getCustomersByStatus(status);
-
-        return ResponseEntity.ok(UnifiedResponse.success(customers, HttpStatus.OK));
-    }
-
-    /* ================= BLOCK CUSTOMER ================= */
-
-    @Operation(summary = "Block Customer by customer Id")
-    @PatchMapping("/{customerId}/block")
-    public ResponseEntity<UnifiedResponse<Customer>> blockCustomer(
-            @PathVariable String customerId) {
-
-        var customer = customerService.blockCustomer(customerId);
-
-        return ResponseEntity.ok(UnifiedResponse.success(customer, HttpStatus.OK));
     }
 }
 

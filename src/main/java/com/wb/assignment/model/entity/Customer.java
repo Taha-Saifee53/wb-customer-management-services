@@ -49,7 +49,7 @@ public class Customer implements Serializable {
     @Column(name = "status", nullable = false, length = 10)
     private CustomerStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 

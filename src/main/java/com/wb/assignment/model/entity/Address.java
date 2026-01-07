@@ -35,7 +35,7 @@ public class Address implements Serializable {
     private String addressLine1;
 
     @NotBlank
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 50)
     private String addressLine2;
 }
 

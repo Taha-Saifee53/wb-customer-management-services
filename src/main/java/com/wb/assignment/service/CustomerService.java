@@ -2,11 +2,10 @@ package com.wb.assignment.service;
 
 import com.wb.assignment.exception.BusinessException;
 import com.wb.assignment.model.entity.Customer;
-import com.wb.assignment.model.enums.CustomerStatus;
-import com.wb.assignment.model.enums.CustomerType;
 import com.wb.assignment.repository.CustomerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -21,6 +21,7 @@ public class CustomerService {
     @Transactional
     public Customer createCustomer(Customer customer) {
 
+        log.info("Create Customer");
         if (customerRepository.existsByCustomerId(customer.getCustomerId())) {
             throw new BusinessException(
                     "DUPLICATE_CUSTOMER_ID",
@@ -39,28 +40,15 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(String customerId) {
+        log.info("Fetch Customer Details by Id");
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Customer not found with ID: " + customerId));
     }
 
     public List<Customer> getAllCustomers() {
+        log.info("Fetch all customer details");
         return customerRepository.findAll();
-    }
-
-    public List<Customer> getCustomersByType(CustomerType type) {
-        return customerRepository.findByCustomerType(type);
-    }
-
-    public List<Customer> getCustomersByStatus(CustomerStatus status) {
-        return customerRepository.findByStatus(status);
-    }
-
-    @Transactional
-    public Customer blockCustomer(String customerId) {
-        Customer customer = getCustomerById(customerId);
-        customer.setStatus(CustomerStatus.BLOCKED);
-        return customerRepository.save(customer);
     }
 
 }
