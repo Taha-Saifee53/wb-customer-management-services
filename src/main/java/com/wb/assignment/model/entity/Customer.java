@@ -4,12 +4,19 @@ import com.wb.assignment.model.enums.CustomerStatus;
 import com.wb.assignment.model.enums.CustomerType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(
         name = "customers",
@@ -17,7 +24,7 @@ import java.util.Objects;
                 @UniqueConstraint(columnNames = "legal_id")
         }
 )
-public class Customer {
+public class Customer implements Serializable {
 
     @Id
     @Column(name = "customer_id", length = 7, nullable = false, updatable = false)
@@ -42,9 +49,9 @@ public class Customer {
     @Column(name = "status", nullable = false, length = 10)
     private CustomerStatus status;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String address;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
 
     @Email
     @Column(length = 100)
