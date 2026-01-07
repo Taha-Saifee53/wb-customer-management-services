@@ -29,7 +29,7 @@ public class CustomerController {
         var savedCustomer = customerService.createCustomer(customer);
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.OK)
                 .body(UnifiedResponse.success(savedCustomer, HttpStatus.OK));
     }
 
