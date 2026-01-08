@@ -7,8 +7,10 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 import java.util.stream.Collectors;
 
 import static com.wb.assignment.response.UnifiedResponse.failure;
@@ -62,5 +64,21 @@ public class ServiceExceptionHandler {
         log.error("Occurred Global Exception {}", ex.getMessage());
         var error = failure("Unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR, null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    /* ================= VALIDATION EXCEPTION HANDLER ================= */
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<UnifiedResponse<Object>> handleValidationErrors(
+            MethodArgumentNotValidException ex) {
+
+        var errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> String.format("%s: %s", error.getField(), error.getDefaultMessage()))
+                .toList();
+        var error = failure("Validation failed", HttpStatus.BAD_REQUEST, errors);
+
+        return ResponseEntity.badRequest().body(error);
     }
 }
