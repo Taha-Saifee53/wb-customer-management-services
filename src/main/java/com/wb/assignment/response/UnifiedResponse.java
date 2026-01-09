@@ -26,7 +26,7 @@ public class UnifiedResponse<T> implements Serializable {
 
     private List<String> validationErrors;
 
-    /* ================= FACTORY METHODS ================= */
+    /* ================= METHODS ================= */
 
     public static <T> UnifiedResponse<T> success(T data, HttpStatus status) {
         return UnifiedResponse.<T>builder()
