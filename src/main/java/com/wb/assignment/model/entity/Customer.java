@@ -57,7 +57,7 @@ public class Customer implements Serializable {
     @Column(length = 100)
     private String email;
 
-    @Column(length = 20)
+    @Column(length = 8)
     private String phone;
 
     @Column(name = "created_at", nullable = false, updatable = false)
