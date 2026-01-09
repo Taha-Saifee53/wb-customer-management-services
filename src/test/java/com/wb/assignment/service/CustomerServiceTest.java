@@ -96,7 +96,7 @@ class CustomerServiceTest {
         when(customerRepository.existsByCustomerId(request.getCustomerId())).thenReturn(false);
         when(customerRepository.existsByLegalId(request.getLegalId())).thenReturn(false);
         when(customerRepository.save(any(Customer.class))).thenReturn(customerToSave);
-        BusinessException ex = assertThrows(BusinessException.class,
+        var ex = assertThrows(BusinessException.class,
                 () -> customerService.createCustomer(request));
         assertThat(ex.getErrorCode()).isEqualTo("APPLICATION_ERROR");
     }
@@ -108,7 +108,7 @@ class CustomerServiceTest {
                 .build();
         when(customerRepository.existsByCustomerId("1234567")).thenReturn(true);
 
-        BusinessException ex = assertThrows(BusinessException.class,
+        var ex = assertThrows(BusinessException.class,
                 () -> customerService.createCustomer(request));
         assertThat(ex.getErrorCode()).isEqualTo("DUPLICATE_CUSTOMER_ID");
     }
@@ -122,7 +122,7 @@ class CustomerServiceTest {
 
         when(customerRepository.existsByCustomerId("1234567")).thenReturn(false);
         when(customerRepository.existsByLegalId("322060301853")).thenReturn(true);
-        BusinessException ex = assertThrows(BusinessException.class,
+        var ex = assertThrows(BusinessException.class,
                 () -> customerService.createCustomer(request));
         assertThat(ex.getErrorCode()).isEqualTo("DUPLICATE_LEGAL_ID");
     }
@@ -131,9 +131,9 @@ class CustomerServiceTest {
 
     @Test
     void getCustomerById_shouldReturnCustomer() {
-        Customer customer = Customer.builder().customerId("1234567").build();
+        var customer = Customer.builder().customerId("1234567").build();
         when(customerRepository.findById("1234567")).thenReturn(Optional.of(customer));
-        Customer result = customerService.getCustomerById("1234567");
+        var result = customerService.getCustomerById("1234567");
         assertThat(result).isEqualTo(customer);
     }
 
