@@ -47,7 +47,7 @@ public class CustomerService {
             eventPublisher.publishCustomerCreated(savedCustomerDetails, onboardCustomerRequest.getMinAmount());
         } else {
             log.info("Customer Details Not saved");
-            throw new BusinessException("Customer Details Not Saved");
+            throw new BusinessException("APPLICATION_ERROR","Customer Details Not Saved");
         }
 
         return savedCustomerDetails;
