@@ -57,7 +57,7 @@ public class CustomerService {
         log.info("Fetch Customer Details by Id");
         return customerRepository.findById(customerId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Customer not found with ID: " + customerId));
+                        String.format("%s %s", "Customer not found with ID: ", customerId)));
     }
 
     public List<Customer> getAllCustomers() {
