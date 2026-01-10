@@ -23,23 +23,23 @@ class RabbitMQConfigTest {
     @Test
     void shouldCreateCustomerExchange() {
         assertThat(customerExchange).isNotNull();
-        assertThat(customerExchange.getName()).isEqualTo(CUSTOMER_EXCHANGE);
+        assertThat(customerExchange.getName()).isEqualTo(ACCOUNT_EXCHANGE);
         assertThat(customerExchange.getType()).isEqualTo(ExchangeTypes.TOPIC);
     }
 
     @Test
     void shouldCreateCustomerCreatedQueue() {
         assertThat(customerCreatedQueue).isNotNull();
-        assertThat(customerCreatedQueue.getName()).isEqualTo(CUSTOMER_CREATED_QUEUE);
+        assertThat(customerCreatedQueue.getName()).isEqualTo(ACCOUNT_CREATED_QUEUE);
         assertThat(customerCreatedQueue.isDurable()).isTrue();
     }
 
     @Test
     void shouldBindQueueToExchangeWithRoutingKey() {
         assertThat(customerCreatedBinding).isNotNull();
-        assertThat(customerCreatedBinding.getExchange()).isEqualTo(CUSTOMER_EXCHANGE);
-        assertThat(customerCreatedBinding.getDestination()).isEqualTo(CUSTOMER_CREATED_QUEUE);
-        assertThat(customerCreatedBinding.getRoutingKey()).isEqualTo(CUSTOMER_CREATED_ROUTING_KEY);
+        assertThat(customerCreatedBinding.getExchange()).isEqualTo(ACCOUNT_EXCHANGE);
+        assertThat(customerCreatedBinding.getDestination()).isEqualTo(ACCOUNT_CREATED_QUEUE);
+        assertThat(customerCreatedBinding.getRoutingKey()).isEqualTo(ACCOUNT_CREATED_ROUTING_KEY);
         assertThat(customerCreatedBinding.getDestinationType())
                 .isEqualTo(Binding.DestinationType.QUEUE);
     }

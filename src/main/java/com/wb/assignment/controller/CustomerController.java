@@ -1,6 +1,7 @@
 package com.wb.assignment.controller;
 
 import com.wb.assignment.model.entity.Customer;
+import com.wb.assignment.request.CreateAccountRequest;
 import com.wb.assignment.request.OnboardCustomerRequest;
 import com.wb.assignment.response.UnifiedResponse;
 import com.wb.assignment.service.CustomerService;
@@ -51,5 +52,19 @@ public class CustomerController {
         var customers = customerService.getAllCustomers();
         return ResponseEntity.ok(UnifiedResponse.success(customers, HttpStatus.OK));
     }
+
+    /* ================= CREATE NEW ACCOUNT ================= */
+
+    @Operation(summary = "Create a new account")
+    @PostMapping("create-account")
+    public ResponseEntity<UnifiedResponse<String>> createAccount(
+            @Valid @RequestBody CreateAccountRequest createAccountRequest) {
+
+        var savedCustomer = customerService.createAccount(createAccountRequest);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(UnifiedResponse.success(savedCustomer, HttpStatus.OK));
+    }
+
 }
 

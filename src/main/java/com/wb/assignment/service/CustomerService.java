@@ -1,9 +1,12 @@
 package com.wb.assignment.service;
 
 import com.wb.assignment.exception.BusinessException;
-import com.wb.assignment.rabbitMQ.CustomerEventPublisher;
+import com.wb.assignment.rabbitMQ.AccountEventPublisher;
 import com.wb.assignment.model.entity.Customer;
+import com.wb.assignment.repository.AccountRepository;
 import com.wb.assignment.repository.CustomerRepository;
+import com.wb.assignment.request.AccountType;
+import com.wb.assignment.request.CreateAccountRequest;
 import com.wb.assignment.request.OnboardCustomerRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +23,8 @@ import java.util.Objects;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final CustomerEventPublisher eventPublisher;
+    private final AccountEventPublisher eventPublisher;
+    private final AccountRepository accountRepository;
 
     @Transactional
     public Customer createCustomer(OnboardCustomerRequest onboardCustomerRequest) {
@@ -41,16 +45,14 @@ public class CustomerService {
             );
         }
 
-        var savedCustomerDetails =  customerRepository.save(customer);
+        var savedCustomerDetails = customerRepository.save(customer);
         if (!Objects.isNull(savedCustomerDetails.getCustomerId())) {
-            log.info("Publish Customer Details");
-            eventPublisher.publishCustomerCreated(savedCustomerDetails, onboardCustomerRequest.getMinAmount());
+            log.info("Customer Details Saved");
+            return savedCustomerDetails;
         } else {
             log.info("Customer Details Not saved");
-            throw new BusinessException("APPLICATION_ERROR","Customer Details Not Saved");
+            throw new BusinessException("APPLICATION_ERROR", "Customer Details Not Saved");
         }
-
-        return savedCustomerDetails;
     }
 
     public Customer getCustomerById(String customerId) {
@@ -63,6 +65,46 @@ public class CustomerService {
     public List<Customer> getAllCustomers() {
         log.info("Fetch all customer details");
         return customerRepository.findAll();
+    }
+
+    public String createAccount(CreateAccountRequest createAccountRequest) {
+
+        if (!Objects.isNull(createAccountRequest)) {
+            validateAccountRules(createAccountRequest.getCustomerId(), createAccountRequest.getAccountType());
+            eventPublisher.publishAccountCreated(createAccountRequest);
+            return "Account creation request published successfully";
+        } else {
+            log.error("Create Account request is null");
+            throw new BusinessException("INVALID_REQUEST", "Invalid Request");
+        }
+
+    }
+
+    /**
+     * Business rule validations
+     */
+    private void validateAccountRules(String customerId, AccountType accountType) {
+
+        long accountCount = accountRepository.countByCustomerId(customerId);
+        if (accountCount > 10) {
+            log.error(
+                    "{} : {}", "ACCOUNT_LIMIT_EXCEEDED",
+                    "Customer already has maximum allowed accounts");
+            throw new BusinessException(
+                    "ACCOUNT_LIMIT_EXCEEDED",
+                    "Customer already has maximum allowed accounts"
+            );
+        }
+
+        if (accountRepository.existsByCustomerIdAndAccountType(customerId, accountType)) {
+            log.error(
+                    "{} : {}", "SALARY_ACCOUNT_EXISTS",
+                    "Salary account already exists for customer");
+            throw new BusinessException(
+                    "SALARY_ACCOUNT_EXISTS",
+                    "Salary account already exists for customer"
+            );
+        }
     }
 
     private Customer mapOnboardCustomer(OnboardCustomerRequest onboardCustomerRequest) {

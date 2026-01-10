@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerCreatedEvent implements Serializable {
+public class AccountCreateEvent implements Serializable {
 
     private String customerId;
     private String customerType;
-    private String status;
-    private double minAmount;
-    private LocalDateTime createdAt;
+    private AccountType accountType;
+    private AccountStatus status;
+    private double balance;
 }
 

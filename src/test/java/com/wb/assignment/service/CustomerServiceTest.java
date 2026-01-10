@@ -5,7 +5,7 @@ import com.wb.assignment.model.entity.Address;
 import com.wb.assignment.model.entity.Customer;
 import com.wb.assignment.model.enums.CustomerStatus;
 import com.wb.assignment.model.enums.CustomerType;
-import com.wb.assignment.rabbitMQ.CustomerEventPublisher;
+import com.wb.assignment.rabbitMQ.AccountEventPublisher;
 import com.wb.assignment.repository.CustomerRepository;
 import com.wb.assignment.request.OnboardCustomerRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,7 @@ class CustomerServiceTest {
     private CustomerRepository customerRepository;
 
     @Mock
-    private CustomerEventPublisher eventPublisher;
+    private AccountEventPublisher eventPublisher;
 
     @InjectMocks
     private CustomerService customerService;
@@ -50,7 +50,6 @@ class CustomerServiceTest {
                 .status(CustomerStatus.ACTIVE)
                 .legalId("322060301853")
                 .address(address)
-                .minAmount(1000.0)
                 .build();
         var customerToSave = Customer.builder()
                 .customerId("1234567")
@@ -68,7 +67,6 @@ class CustomerServiceTest {
         assertThat(saved).isEqualTo(customerToSave);
         // Verify repository save and event published
         verify(customerRepository, times(1)).save(any(Customer.class));
-        verify(eventPublisher, times(1)).publishCustomerCreated(saved, request.getMinAmount());
     }
 
 
@@ -82,7 +80,6 @@ class CustomerServiceTest {
                 .status(CustomerStatus.ACTIVE)
                 .legalId("322060301853")
                 .address(address)
-                .minAmount(1000.0)
                 .build();
         var customerToSave = Customer.builder()
                 .customerId(null)
