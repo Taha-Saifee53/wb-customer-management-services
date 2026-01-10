@@ -21,6 +21,7 @@ public class AccountEventPublisher {
                 .customerType(createAccountRequest.getCustomerType().name())
                 .accountType(createAccountRequest.getAccountType())
                 .status(createAccountRequest.getAccountStatus())
+                .currency(createAccountRequest.getCurrency())
                 .depositAmount(createAccountRequest.getDepositAmount())
                 .build();
 

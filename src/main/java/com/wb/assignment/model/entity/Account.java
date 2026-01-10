@@ -41,6 +41,9 @@ public class Account implements Serializable {
     @Column(name = "account_type", nullable = false)
     private AccountType accountType;
 
+    @Column(name = "currency", nullable = false, length = 3)
+    private String currency;
+
     @Column(name = "balance", nullable = false, precision = 15, scale = 2)
     private BigDecimal balance;
 

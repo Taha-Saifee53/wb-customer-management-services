@@ -86,7 +86,7 @@ public class CustomerService {
     private void validateAccountRules(String customerId, AccountType accountType) {
 
         long accountCount = accountRepository.countByCustomer_CustomerId(customerId);
-        if (accountCount > 10) {
+        if (accountCount >= 10) {
             log.error(
                     "{} : {}", "ACCOUNT_LIMIT_EXCEEDED",
                     "Customer already has maximum allowed accounts");
@@ -96,7 +96,8 @@ public class CustomerService {
             );
         }
 
-        if (accountRepository.existsByCustomer_CustomerIdAndAccountType(customerId, accountType)) {
+        if (accountRepository.existsByCustomer_CustomerIdAndAccountType(customerId, AccountType.SALARY)
+                && accountType.name().equalsIgnoreCase(AccountType.SALARY.name())) {
             log.error(
                     "{} : {}", "SALARY_ACCOUNT_EXISTS",
                     "Salary account already exists for customer");

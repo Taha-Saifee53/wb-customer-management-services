@@ -12,8 +12,6 @@ import org.mockito.*;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import java.time.LocalDateTime;
-
 import static org.mockito.Mockito.*;
 
 class AccountEventPublisherTest {
@@ -53,6 +51,6 @@ class AccountEventPublisherTest {
         assert eventSent.getCustomerId().equals(createAccount.getCustomerId());
         assert eventSent.getCustomerType().equals(createAccount.getCustomerType().name());
         assert eventSent.getStatus().equals(createAccount.getAccountStatus());
-        assert eventSent.getBalance() == createAccount.getDepositAmount();
+        assert eventSent.getDepositAmount() == createAccount.getDepositAmount();
     }
 }
