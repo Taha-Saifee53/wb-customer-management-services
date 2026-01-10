@@ -12,25 +12,9 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
 
-    /* ---------- FINDERS ---------- */
-
-    Optional<Customer> findByCustomerId(String customerId);
-
-    Optional<Customer> findByLegalId(String legalId);
-
-    List<Customer> findByCustomerType(CustomerType customerType);
-
-    List<Customer> findByStatus(CustomerStatus status);
-
     /* ---------- EXISTENCE CHECKS (BUSINESS RULES) ---------- */
 
     boolean existsByCustomerId(String customerId);
-
     boolean existsByLegalId(String legalId);
-
-    List<Customer> findByCustomerTypeAndStatus(
-            CustomerType customerType,
-            CustomerStatus status
-    );
 }
 

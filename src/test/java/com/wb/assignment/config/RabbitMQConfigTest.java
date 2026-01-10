@@ -30,7 +30,7 @@ class RabbitMQConfigTest {
     @Test
     void shouldCreateCustomerCreatedQueue() {
         assertThat(customerCreatedQueue).isNotNull();
-        assertThat(customerCreatedQueue.getName()).isEqualTo(ACCOUNT_CREATED_QUEUE);
+        assertThat(customerCreatedQueue.getName()).isEqualTo(ACCOUNT_CREATE_QUEUE);
         assertThat(customerCreatedQueue.isDurable()).isTrue();
     }
 
@@ -38,8 +38,8 @@ class RabbitMQConfigTest {
     void shouldBindQueueToExchangeWithRoutingKey() {
         assertThat(customerCreatedBinding).isNotNull();
         assertThat(customerCreatedBinding.getExchange()).isEqualTo(ACCOUNT_EXCHANGE);
-        assertThat(customerCreatedBinding.getDestination()).isEqualTo(ACCOUNT_CREATED_QUEUE);
-        assertThat(customerCreatedBinding.getRoutingKey()).isEqualTo(ACCOUNT_CREATED_ROUTING_KEY);
+        assertThat(customerCreatedBinding.getDestination()).isEqualTo(ACCOUNT_CREATE_QUEUE);
+        assertThat(customerCreatedBinding.getRoutingKey()).isEqualTo(ACCOUNT_CREATE_ROUTING_KEY);
         assertThat(customerCreatedBinding.getDestinationType())
                 .isEqualTo(Binding.DestinationType.QUEUE);
     }

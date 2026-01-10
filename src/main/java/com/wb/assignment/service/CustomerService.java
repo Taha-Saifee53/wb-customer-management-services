@@ -1,6 +1,7 @@
 package com.wb.assignment.service;
 
 import com.wb.assignment.exception.BusinessException;
+import com.wb.assignment.model.entity.Account;
 import com.wb.assignment.rabbitMQ.AccountEventPublisher;
 import com.wb.assignment.model.entity.Customer;
 import com.wb.assignment.repository.AccountRepository;
@@ -69,6 +70,7 @@ public class CustomerService {
 
     public String createAccount(CreateAccountRequest createAccountRequest) {
 
+        log.info("Create Account");
         if (!Objects.isNull(createAccountRequest)) {
             validateAccountRules(createAccountRequest.getCustomerId(), createAccountRequest.getAccountType());
             eventPublisher.publishAccountCreated(createAccountRequest);
@@ -78,6 +80,11 @@ public class CustomerService {
             throw new BusinessException("INVALID_REQUEST", "Invalid Request");
         }
 
+    }
+
+    public List<Account> getAllAccountsForCustomers(String customerId) {
+        log.info("Fetch all accounts by customerId : {}", customerId);
+        return accountRepository.findByCustomer_CustomerId(customerId);
     }
 
     /**

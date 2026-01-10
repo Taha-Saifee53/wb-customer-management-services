@@ -1,6 +1,8 @@
 package com.wb.assignment.controller;
 
+import com.wb.assignment.model.entity.Account;
 import com.wb.assignment.model.entity.Customer;
+import com.wb.assignment.repository.AccountRepository;
 import com.wb.assignment.request.CreateAccountRequest;
 import com.wb.assignment.request.OnboardCustomerRequest;
 import com.wb.assignment.response.UnifiedResponse;
@@ -20,6 +22,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final AccountRepository accountRepository;
 
     /* ================= ONBOARD NEW CUSTOMER ================= */
 
@@ -65,6 +68,17 @@ public class CustomerController {
                 .status(HttpStatus.OK)
                 .body(UnifiedResponse.success(savedCustomer, HttpStatus.OK));
     }
+
+    /* ================= GET ACCOUNTS CUSTOMER BY ID ================= */
+
+    @Operation(summary = "Get All Accounts By Customer Id")
+    @GetMapping("/fecth-accounts/{customerId}")
+    public ResponseEntity<UnifiedResponse<List<Account>>> getAllAccounts(
+            @PathVariable String customerId) {
+        var accounts = accountRepository.findByCustomer_CustomerId(customerId);
+        return ResponseEntity.ok(UnifiedResponse.success(accounts, HttpStatus.OK));
+    }
+
 
 }
 

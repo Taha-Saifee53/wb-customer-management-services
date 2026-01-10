@@ -1,7 +1,6 @@
 package com.wb.assignment.rabbitMQ;
 
 import com.wb.assignment.common.Constant;
-import com.wb.assignment.model.entity.Customer;
 import com.wb.assignment.request.AccountCreateEvent;
 import com.wb.assignment.request.CreateAccountRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ public class AccountEventPublisher {
 
         rabbitTemplate.convertAndSend(
                 Constant.ACCOUNT_EXCHANGE,
-                Constant.ACCOUNT_CREATED_ROUTING_KEY,
+                Constant.ACCOUNT_CREATE_ROUTING_KEY,
                 event
         );
     }

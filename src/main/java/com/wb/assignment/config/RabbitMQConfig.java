@@ -19,7 +19,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue customerCreatedQueue() {
-        return new Queue(ACCOUNT_CREATED_QUEUE, true);
+        return new Queue(ACCOUNT_CREATE_QUEUE, true);
     }
 
     @Bean
@@ -27,7 +27,7 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(customerCreatedQueue())
                 .to(customerExchange())
-                .with(ACCOUNT_CREATED_ROUTING_KEY);
+                .with(ACCOUNT_CREATE_ROUTING_KEY);
     }
 }
 

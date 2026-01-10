@@ -42,7 +42,7 @@ class AccountEventPublisherTest {
         ArgumentCaptor<AccountCreateEvent> captor = ArgumentCaptor.forClass(AccountCreateEvent.class);
         verify(rabbitTemplate, times(1)).convertAndSend(
                 eq(Constant.ACCOUNT_EXCHANGE),
-                eq(Constant.ACCOUNT_CREATED_ROUTING_KEY),
+                eq(Constant.ACCOUNT_CREATE_ROUTING_KEY),
                 captor.capture()
         );
         var eventSent = captor.getValue();
