@@ -1,5 +1,6 @@
 package com.wb.assignment.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wb.assignment.model.enums.CustomerStatus;
 import com.wb.assignment.model.enums.CustomerType;
 import jakarta.persistence.*;
@@ -67,6 +68,7 @@ public class Customer implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonManagedReference
     private List<Account> accounts = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)

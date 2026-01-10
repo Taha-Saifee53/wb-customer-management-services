@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:test
+    url: jdbc:h2:tcp://localhost/C:/Users/LENOVO/h2data/shared-db;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE;IFEXISTS=FALSE
     driver-class-name: org.h2.Driver
-    username: test
-    password: test
+    username: sa
+    password:
 
   jpa:
     hibernate:

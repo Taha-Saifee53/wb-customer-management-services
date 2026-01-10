@@ -1,5 +1,6 @@
 package com.wb.assignment.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wb.assignment.request.AccountStatus;
 import com.wb.assignment.request.AccountType;
 import jakarta.persistence.*;
@@ -33,6 +34,7 @@ public class Account implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false)
+    @JsonIgnore
     private Customer customer;
 
     @Enumerated(EnumType.STRING)

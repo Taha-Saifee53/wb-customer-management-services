@@ -21,7 +21,7 @@ public class AccountEventPublisher {
                 .customerType(createAccountRequest.getCustomerType().name())
                 .accountType(createAccountRequest.getAccountType())
                 .status(createAccountRequest.getAccountStatus())
-                .balance(createAccountRequest.getDepositAmount())
+                .depositAmount(createAccountRequest.getDepositAmount())
                 .build();
 
         rabbitTemplate.convertAndSend(
