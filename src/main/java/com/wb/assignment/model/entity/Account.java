@@ -32,11 +32,6 @@ public class Account implements Serializable {
     @Column(name = "account_id", length = 10, nullable = false)
     private String accountId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false)
-    @JsonIgnore
-    private Customer customer;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type", nullable = false)
     private AccountType accountType;
