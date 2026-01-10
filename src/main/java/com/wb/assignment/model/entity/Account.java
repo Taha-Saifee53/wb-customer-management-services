@@ -32,7 +32,7 @@ public class Account implements Serializable {
     private String accountId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false)
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
