@@ -1,12 +1,16 @@
 package com.wb.assignment.service;
 
 import com.wb.assignment.exception.BusinessException;
+import com.wb.assignment.model.entity.Account;
 import com.wb.assignment.model.entity.Address;
 import com.wb.assignment.model.entity.Customer;
 import com.wb.assignment.model.enums.CustomerStatus;
 import com.wb.assignment.model.enums.CustomerType;
 import com.wb.assignment.rabbitMQ.AccountEventPublisher;
+import com.wb.assignment.repository.AccountRepository;
 import com.wb.assignment.repository.CustomerRepository;
+import com.wb.assignment.request.AccountType;
+import com.wb.assignment.request.CreateAccountRequest;
 import com.wb.assignment.request.OnboardCustomerRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CustomerServiceTest {
@@ -29,6 +33,9 @@ class CustomerServiceTest {
 
     @Mock
     private AccountEventPublisher eventPublisher;
+
+    @Mock
+    private AccountRepository accountRepository;
 
     @InjectMocks
     private CustomerService customerService;
@@ -97,6 +104,7 @@ class CustomerServiceTest {
                 () -> customerService.createCustomer(request));
         assertThat(ex.getErrorCode()).isEqualTo("APPLICATION_ERROR");
     }
+
     @Test
     void createCustomer_shouldThrowBusinessException_ifDuplicateCustomerId() {
         var request = OnboardCustomerRequest.builder()
@@ -153,4 +161,108 @@ class CustomerServiceTest {
         List<Customer> result = customerService.getAllCustomers();
         assertThat(result).isEqualTo(customers);
     }
+
+    @Test
+    void createAccount_success_shouldPublishEvent() {
+        // given
+        var request = new CreateAccountRequest();
+        request.setCustomerId("1234567");
+        request.setAccountType(AccountType.SALARY);
+
+        when(accountRepository.countByCustomer_CustomerId("1234567"))
+                .thenReturn(2L);
+
+        when(accountRepository.existsByCustomer_CustomerIdAndAccountType(
+                "1234567", AccountType.SALARY))
+                .thenReturn(false);
+
+        // when
+        String response = customerService.createAccount(request);
+
+        // then
+        assertEquals("Account creation request published successfully", response);
+        verify(eventPublisher, times(1))
+                .publishAccountCreated(request);
+    }
+
+    @Test
+    void createAccount_nullRequest_shouldThrowException() {
+        // when & then
+        var ex = assertThrows(
+                BusinessException.class,
+                () -> customerService.createAccount(null)
+        );
+
+        assertEquals("INVALID_REQUEST", ex.getErrorCode());
+        verifyNoInteractions(accountRepository);
+        verifyNoInteractions(eventPublisher);
+    }
+
+    @Test
+    void createAccount_accountLimitExceeded_shouldThrowException() {
+        // given
+        var request = new CreateAccountRequest();
+        request.setCustomerId("1234567");
+        request.setAccountType(AccountType.CURRENT);
+
+        when(accountRepository.countByCustomer_CustomerId("1234567"))
+                .thenReturn(10L);
+
+        // when & then
+        var ex = assertThrows(
+                BusinessException.class,
+                () -> customerService.createAccount(request)
+        );
+
+        assertEquals("ACCOUNT_LIMIT_EXCEEDED", ex.getErrorCode());
+        verify(eventPublisher, never()).publishAccountCreated(any());
+    }
+
+    @Test
+    void createAccount_salaryAccountAlreadyExists_shouldThrowException() {
+        // given
+        var request = new CreateAccountRequest();
+        request.setCustomerId("1234567");
+        request.setAccountType(AccountType.SALARY);
+
+        when(accountRepository.countByCustomer_CustomerId("1234567"))
+                .thenReturn(3L);
+
+        when(accountRepository.existsByCustomer_CustomerIdAndAccountType(
+                "1234567", AccountType.SALARY))
+                .thenReturn(true);
+
+        // when & then
+        var ex = assertThrows(
+                BusinessException.class,
+                () -> customerService.createAccount(request)
+        );
+
+        assertEquals("SALARY_ACCOUNT_EXISTS", ex.getErrorCode());
+        verify(eventPublisher, never()).publishAccountCreated(any());
+    }
+
+    @Test
+    void getAllAccountsForCustomers_shouldReturnAccountList() {
+        // given
+        var customerId = "1234567";
+
+        var account1 = new Account();
+        var account2 = new Account();
+
+        List<Account> mockAccounts = List.of(account1, account2);
+
+        when(accountRepository.findByCustomer_CustomerId(customerId))
+                .thenReturn(mockAccounts);
+
+        // when
+        List<Account> result = customerService.getAllAccountsForCustomers(customerId);
+
+        // then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(accountRepository, times(1))
+                .findByCustomer_CustomerId(customerId);
+    }
+
 }

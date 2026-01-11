@@ -74,12 +74,11 @@ public class CustomerService {
         if (!Objects.isNull(createAccountRequest)) {
             validateAccountRules(createAccountRequest.getCustomerId(), createAccountRequest.getAccountType());
             eventPublisher.publishAccountCreated(createAccountRequest);
-            return "Account creation request published successfully";
+            return "New Account creation request submitted successfully";
         } else {
             log.error("Create Account request is null");
             throw new BusinessException("INVALID_REQUEST", "Invalid Request");
         }
-
     }
 
     public List<Account> getAllAccountsForCustomers(String customerId) {
