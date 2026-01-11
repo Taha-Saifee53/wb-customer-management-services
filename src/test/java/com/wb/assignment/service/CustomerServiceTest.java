@@ -180,7 +180,7 @@ class CustomerServiceTest {
         String response = customerService.createAccount(request);
 
         // then
-        assertEquals("Account creation request published successfully", response);
+        assertEquals("New Account creation request submitted successfully", response);
         verify(eventPublisher, times(1))
                 .publishAccountCreated(request);
     }
