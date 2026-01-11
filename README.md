@@ -40,9 +40,9 @@ This is a Spring Boot microservice responsible for managing bank customers. It p
 
 **Event-Driven Architecture (EDA) Flow**
 
-1. Client sends POST /api/v1/customers/onboard-customer
-2. CustomerService validates and saves the customer to DB
-3. On Create Account AccountEventPublisher publishes a AccountCreateEvent to RabbitMQ
+1. Client sends POST /api/v1/customers/create-account
+2. CustomerService validates new account creation request
+3. AccountEventPublisher publishes a AccountCreateEvent to RabbitMQ
 4. Account Service receives the event and processes it asynchronously
 5. Decouples customer onboarding from downstream services
 

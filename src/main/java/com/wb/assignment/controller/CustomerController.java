@@ -25,7 +25,7 @@ public class CustomerController {
     /* ================= ONBOARD NEW CUSTOMER ================= */
 
     @Operation(summary = "Onboard a new customer")
-    @PostMapping("onboard-customer")
+    @PostMapping("/onboard-customer")
     public ResponseEntity<UnifiedResponse<Customer>> createCustomer(
             @Valid @RequestBody OnboardCustomerRequest onboardCustomerRequest) {
 
@@ -48,7 +48,7 @@ public class CustomerController {
     /* ================= GET ALL ONBOARDED CUSTOMERS ================= */
 
     @Operation(summary = "Get All Onboarded Customers")
-    @GetMapping("list-onboard-customers")
+    @GetMapping("/list-onboard-customers")
     public ResponseEntity<UnifiedResponse<List<Customer>>> getAllCustomers() {
         var customers = customerService.getAllCustomers();
         return ResponseEntity.ok(UnifiedResponse.success(customers, HttpStatus.OK));
@@ -57,7 +57,7 @@ public class CustomerController {
     /* ================= CREATE NEW ACCOUNT ================= */
 
     @Operation(summary = "Create a new account")
-    @PostMapping("create-account")
+    @PostMapping("/create-account")
     public ResponseEntity<UnifiedResponse<String>> createAccount(
             @Valid @RequestBody CreateAccountRequest createAccountRequest) {
 
