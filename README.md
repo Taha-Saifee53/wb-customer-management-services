@@ -32,7 +32,7 @@ This is a Spring Boot microservice responsible for managing bank customers. It p
    +-------------------+
    | Account Service   |
    | (Consumer of      |
-   | CustomerCreatedEvent) |
+   | AccountCreateEvent) |
    +-------------------+
 
 </pre>
@@ -42,7 +42,7 @@ This is a Spring Boot microservice responsible for managing bank customers. It p
 
 1. Client sends POST /api/v1/customers/onboard-customer
 2. CustomerService validates and saves the customer to DB
-3. CustomerEventPublisher publishes a CustomerCreatedEvent to RabbitMQ
+3. On Create Account AccountEventPublisher publishes a AccountCreateEvent to RabbitMQ
 4. Account Service receives the event and processes it asynchronously
 5. Decouples customer onboarding from downstream services
 
@@ -133,6 +133,8 @@ This is a Spring Boot microservice responsible for managing bank customers. It p
 1. customerId must be 7 digits
 2. Phone number must be 8 digits
 3. Validation enforced via Jakarta Bean Validation (@Valid)
+4. Number of accounts will be validated it should not be more than 10
+5. At least one Salary account will be created for a particular customer
 
 **REST APIs**
 
@@ -175,7 +177,7 @@ Unit tests with JUnit 5 and Mockito:
 2. Customer type: RETAIL, CORPORATE, INVESTMENT
 3. Each customer can have up to 10 accounts
 4. One salary account allowed per customer
-5. RabbitMQ consumers (like account service) exist and process events
+5. RabbitMQ consumers (account service) exist and process events and save the account in db
 
 
 **Shortcomings**
