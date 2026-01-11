@@ -70,7 +70,7 @@ public class CustomerController {
     /* ================= GET ACCOUNTS CUSTOMER BY ID ================= */
 
     @Operation(summary = "Get All Accounts By Customer Id")
-    @GetMapping("/fecth-accounts/{customerId}")
+    @GetMapping("/fetch-accounts/{customerId}")
     public ResponseEntity<UnifiedResponse<List<Account>>> getAllAccounts(
             @PathVariable String customerId) {
         var accounts = customerService.getAllAccountsForCustomers(customerId);
