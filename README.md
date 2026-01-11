@@ -3,7 +3,7 @@
 
 **Overview**
 
-This is a Spring Boot microservice responsible for managing bank customers. It provides REST APIs for customer onboarding, retrieval, and listing. The service is designed as part of a microservices ecosystem, communicating events to account services using RabbitMQ for Event-Driven Architecture (EDA).
+This is a Spring Boot microservice responsible for managing bank customers. It provides REST APIs for customer onboarding, retrieval, listing customers, account creation and listing accounts. The service is designed as part of a microservices ecosystem, communicating events to account services using RabbitMQ for Event-Driven Architecture (EDA).
 
 
 **Architecture Diagram**
