@@ -73,6 +73,19 @@ This is a Spring Boot microservice responsible for managing bank customers. It p
 | building_no   | VARCHAR |             |
 | governorate   | VARCHAR |             |
 
+**Account Table**
+
+| Column       | Type       | Constraints                |
+|--------------|------------|----------------------------|
+| account_id   | BIGINT     | PK                         |
+| customer_id  | BIGINT     | FK -> Customer.customer_id |
+| account_type | VARCHAR    |                            |
+| currency     | VARCHAR    |                            |
+| balance      | BIGDECIMAL |                            |
+| status       | VARCHAR    |                            |
+| created_at   | TIMESTAMP  |                            |
+| updated_at   | TIMESTAMP  |                            |
+
 
 **Design Decisions**
 
@@ -109,6 +122,12 @@ This is a Spring Boot microservice responsible for managing bank customers. It p
 1. id, addressLine1, addressLine2, area, buildingNo, governorate
 2. Linked to customer using @OneToOne
 
+**Account Entity:**
+
+1. accountId(10 digits, primary key)
+2. Linked to customer using @ManyToOne
+3. accountType, currency, balance, status, createdAt, updatedAt
+
 **Validation**
 
 1. customerId must be 7 digits
@@ -117,11 +136,13 @@ This is a Spring Boot microservice responsible for managing bank customers. It p
 
 **REST APIs**
 
-| Endpoint                                   | Method | Description                  |
-| ------------------------------------------ | ------ | ---------------------------- |
-| `/api/v1/customers/onboard-customer`       | POST   | Onboard a new customer       |
-| `/api/v1/customers/{customerId}`           | GET    | Retrieve a customer by ID    |
-| `/api/v1/customers/list-onboard-customers` | GET    | List all onboarded customers |
+| Endpoint                                         | Method | Description                              |
+|--------------------------------------------------|--------|------------------------------------------|
+| `/api/v1/customers/onboard-customer`             | POST   | Onboard a new customer                   |
+| `/api/v1/customers/{customerId}`                 | GET    | Retrieve a customer by ID                |
+| `/api/v1/customers/list-onboard-customers`       | GET    | List all onboarded customers             |
+| `/api/v1/customers/create-account `              | POST   | Create New Account                       |
+| `/api/v1/customers/fetch-accounts/{customerId}`  | GET    | Fetch all accounts for specific customer |
 
 1. APIs follow OpenAPI Specification (Swagger 3)
  -- Public endpoints: /swagger-ui/**, /v3/api-docs/**, /h2-console/**, /actuator/health
@@ -152,7 +173,7 @@ Unit tests with JUnit 5 and Mockito:
 
 1. Customer status: ACTIVE or BLOCKED
 2. Customer type: RETAIL, CORPORATE, INVESTMENT
-3. Each customer can have up to 10 accounts (managed by account service)
+3. Each customer can have up to 10 accounts
 4. One salary account allowed per customer
 5. RabbitMQ consumers (like account service) exist and process events
 
