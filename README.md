@@ -191,12 +191,27 @@ Unit tests with JUnit 5 and Mockito:
 **Running the Service**
 
 1. Start RabbitMQ (Docker recommended):
-
+<pre>
 docker run -d --hostname rabbitmq --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
-
+</pre>
 2. Run the Spring Boot application:
-
+<pre>
 mvn spring-boot:run
+</pre>
+
+**Environment Variables Configuration**
+
+To avoid committing sensitive information such as database usernames and passwords into source control, this service uses environment variables for all credentials.
+
+**Setting Environment Variables**
+
+<pre>
+set DB_USERNAME=sa (default password of H2 for development local purpose)
+set DB_PASSWORD= (default password of H2 for development local purpose)
+set RABBITMQ_USERNAME=guest (default password of RABBITMQ for development local purpose)
+set RABBITMQ_PASSWORD=guest (default password of RABBITMQ for development local purpose)
+</pre>
+
 
 **Future Improvements**
 
