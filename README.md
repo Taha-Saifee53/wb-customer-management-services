@@ -215,7 +215,7 @@ set RABBITMQ_PASSWORD=guest (default password of RABBITMQ only for development p
 
 **Future Improvements**
 
-1. Add integration tests with Testcontainers for H2 & RabbitMQ
-2. Add JWT/OAuth2 authentication with roles
-3. Add retry/confirmation mechanism for RabbitMQ 
-4. Add pagination, sorting, and filtering for list endpoints
+1. Need to add integration tests with Testcontainers for H2 & RabbitMQ
+2. Need to add JWT/OAuth2 authentication with roles
+3. Need to add retry/confirmation mechanism for RabbitMQ 
+4. Need to add pagination, sorting, and filtering for list endpoints
