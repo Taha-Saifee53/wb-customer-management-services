@@ -190,7 +190,7 @@ Unit tests with JUnit 5 and Mockito:
 
 **Running the Service**
 
-1. Start RabbitMQ (Docker recommended):
+1. Start RabbitMQ:
 <pre>
 docker run -d --hostname rabbitmq --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 </pre>
